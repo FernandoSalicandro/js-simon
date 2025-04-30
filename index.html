@@ -1,0 +1,71 @@
+<!--
+Visualizzare in pagina 5 numeri casuali. Da lì parte un timer di 30 secondi.
+Dopo 30 secondi i numeri scompaiono e appaiono invece 5 input in cui l'utente deve inserire i numeri che ha visto precedentemente, nell'ordine che preferisce.
+Dopo che sono stati inseriti i 5 numeri, il software dice quanti e quali dei numeri da indovinare sono stati individuati.
+**NOTA**: non è importante l'ordine con cui l'utente inserisce i numeri, basta che ne indovini il più possibile.
+**BONUS:**
+- Inseriamo la validazione: se l'utente inserisce cose diverse da numeri lo blocchiamo in qualche modo.
+- Se l’utente ha inserito qualcosa di non valido, segnaliamolo visivamente nel form.
+Consigli del giorno:
+- Pensate prima in italiano.
+- Dividete in piccoli problemi la consegna.
+- Individuate gli elementi di cui avete bisogno per realizzare il programma.
+- Immaginate la logica come fosse uno snack: "Dati 2 array di numeri, indica quali e quanti numeri ci sono in comune tra i due array" -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+    <div class="container my-3">
+        <!-- QUI VA IL GENERATORE DEI 5 NUMERI -->
+        <div>
+
+            <!-- questo poi dovrà sparire dopo un tot -->
+            <h2 id="random-numbers" class="my-3"></h2>
+            <p>Inserisci tutti i numeri che ricordi (l'ordine non è importante)</p>
+        </div>
+
+
+
+
+        <!-- QUI VANNO GLI INPUT -->
+        <form action="submit" id="numbers-form" class="flex my-3">
+            <input type="number" class="memory-num" style="width: calc(100% / 5 - 10px);">
+            <input type="number" class="memory-num" style="width: calc(100% / 5 - 10px);">
+            <input type="number" class="memory-num" style="width: calc(100% / 5 - 10px);">
+            <input type="number" class="memory-num" style="width: calc(100% / 5 - 10px);">
+            <input type="number" class="memory-num" style="width: calc(100% / 5 - 10px);">
+
+        </form>
+
+
+
+        <!-- QUI VA IL BOTTONE -->
+        <div class="flex">
+            <button class="simon_btn" id="conferma-btn">Conferma</button>
+        </div>
+        <!-- QUI VA IL MESSAGGIO -->
+        <div class="flex">
+            <h5 class="" id="messaggio-winlose">Congratulazioni , hai indovinato 3 numeri!!</h5>
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <script src="./js/script.js"></script>
+</body>
+
+</html>
