@@ -6,9 +6,9 @@
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 900px;
     margin: 0 auto;
-    border: 1px solid black;
+    border: 1px solid rgb(255, 255, 255);
 }
 
 .flex {
@@ -17,10 +17,21 @@
     justify-content: space-around;
 }
 
+.justify-center {
+
+    justify-content: center;
+}
+
 .my-3 {
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
+
+.mr-3 {
+
+    margin-right: 20px;
+}
+
 
 /* //GENRATORE NUMERI CASUALI */
 h2,
@@ -28,26 +39,47 @@ p {
     text-align: center;
 }
 
+.simon .bg-red {
+    background-color: red;
+}
+
 
 .simon_btn {
     padding: 4px;
     color: white;
     background-color: rgb(90, 154, 218);
+    border : 1px solid grey;
+    border-radius: 5px;
 }
 
-h5 {
+
+.h5 {
     margin: 10px;
     background-color: rgba(98, 214, 20, 0.252);
     ;
     box-shadow: 0 0 20px rgba(98, 214, 20, 0.859);
 }
 
-/* .h5-loser {
+.h5-loser {
     margin: 10px;
     background-color: rgba(216, 38, 38, 0.252);
     ;
     box-shadow: 0 0 20px rgba(214, 20, 20, 0.859);
 
-} */
+}
 
+
+/* IMPOSTO L'ANIMAZIONE */
+.sbrigati { 
+    background-color: rgba(214, 146, 146, 0.485);
+    color: red;
+    box-shadow: 0 0 50px 15px rgba(240, 83, 83, 0.5);
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
 

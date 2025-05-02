@@ -1,74 +1,137 @@
-// Ciao ragazzi,
-// Esercizio di oggi: **Simon Says**
-// nome repo: js-simon
-// **Descrizione:**
-// Visualizzare in pagina 5 numeri casuali. Da lì parte un timer di 30 secondi.
-// Dopo 30 secondi i numeri scompaiono e appaiono invece 5 input in cui l'utente deve inserire i numeri che ha visto precedentemente, nell'ordine che preferisce.
-// Dopo che sono stati inseriti i 5 numeri, il software dice quanti e quali dei numeri da indovinare sono stati individuati.
-// **NOTA**: non è importante l'ordine con cui l'utente inserisce i numeri, basta che ne indovini il più possibile.
-// **BONUS:**
-// - Inseriamo la validazione: se l'utente inserisce cose diverse da numeri lo blocchiamo in qualche modo.
-// - Se l’utente ha inserito qualcosa di non valido, segnaliamolo visivamente nel form.
-// Consigli del giorno:
-// - Pensate prima in italiano.
-// - Dividete in piccoli problemi la consegna.
-// - Individuate gli elementi di cui avete bisogno per realizzare il programma.
-// - Immaginate la logica come fosse uno snack: "Dati 2 array di numeri, indica quali e quanti numeri ci sono in comune tra i due array"
-
-
-
-//Creazione DOM
-
-//Numeri in stampa
-const generaNumeri = document.getElementById("random-numbers");
-//Bottone di conferma
+//DOM
+const randomNumbers = document.getElementById("random-numbers");
 const bottoneConferma = document.getElementById("conferma-btn");
-//Messaggio hai vinto / hai perso
+const ricomincia = document.getElementById("ricomincia");
 const message = document.getElementById("messaggio-winlose");
-//form group
 const inputForm = document.getElementById("numbers-form");
-//inputs
-const formElem = document.querySelectorAll(".memory-num")
+const formElem = document.querySelectorAll(".memory-num");
 
 
-//procedimento
-//Creo il generatore di numeri:
-//-------Poi lo inserisco come innerHTML in generaNumeri
-//-------Poi imposto un timout in modo che sparisca dopo 30s
+//genero i 5 numeri
+const numeriDaIndovinare = [];
 
-const numeriCasuali = [];
-function simonNumbers() {
-while (numeriCasuali.length < 5) {
-    const numero = Math.floor(Math.random() * 100) + 1; // numeri da 1 a 10
+// Disabilito  gli input all'inizio
+formElem.forEach(input => {
+    input.disabled = true;
+});
 
-    if (!numeriCasuali.includes(numero)) {
-        numeriCasuali.push(numero);
+const indovina = () => {
+    while (numeriDaIndovinare.length < 5) {
+        const numeriRnd = Math.floor((Math.random() * 100) + 1);
+        //escludo i doppioni dai numeri generati
+        if (!numeriDaIndovinare.includes(numeriRnd)) {
+            numeriDaIndovinare.push(numeriRnd)
+        }
     }
-}
-
-
-generaNumeri.innerHTML = numeriCasuali.join(' ');
-}
-
-
-
-simonNumbers();
-
-function cancellaNumeri (){
-    generaNumeri.innerHTML = ``;
 
 }
 
-setTimeout(cancellaNumeri, 3000);
+randomNumbers.innerHTML = numeriDaIndovinare;
+
+const cancellaNumeri = () => {
+    randomNumbers.innerHTML = `<h3 class="sbrigati">Ora Tocca a Te</h3>`
+    // Abilita gli input dopo i primi 30 secondi
+    formElem.forEach(input => {
+        input.disabled = false;
+    });
+
+    // Secondo timer per bloccare il gioco
+    setTimeout(() => {
+        // Rimuovi la scritta lampeggiante e metti quella statica
+        randomNumbers.innerHTML = `<h3>Tempo Scaduto</h3>`;
+
+        formElem.forEach(input => {
+            input.disabled = true;
+        });
+        bottoneConferma.disabled = true;
+        message.classList.remove('h5', 'h5-loser');
+        message.classList.add('h5-loser');
+        message.innerHTML = "Game Over";
+    }, 30000);
+}
+
+setTimeout(cancellaNumeri, 30000)
+
+
+indovina();
+///////////////////7
+//gestico gli input
+const numeriInseriti = [];
+bottoneConferma.addEventListener("click", function () {
+    numeriInseriti.length = 0;
+
+    // Controllo se ci sono campi lasciati vuoti o non validi e stampo il relativo avviso per l'utente
+    let campiVuoti = false;
+    formElem.forEach(input => {
+        if (input.value === '' || input.value === null || input.value === '0') {
+            campiVuoti = true;
+        }
+    });
+
+    if (campiVuoti) {
+        message.innerHTML = `Non puoi lasciare vuoto o inserire 0`;
+        return;
+    }
+
+    formElem.forEach(numeroInserito => {
+        numeriInseriti.push(Number(numeroInserito.value));
+    });
+
+    randomNumbers.innerHTML = ``;
+
+    const numeriUnici = new Set(numeriInseriti)
+
+    if (numeriUnici.size !== numeriDaIndovinare.length) {
+        message.innerHTML = `Hai inserito uno o più doppioni`
+    } else {
+        let counter = 0;
+        let numeroIndovinato = [];
+
+        numeriUnici.forEach(numeroUnico => {
+            if (numeriDaIndovinare.includes(numeroUnico)) {
+                counter++;
+                numeroIndovinato.push(numeroUnico);
+            }
+        });
+
+        // Gestione del messaggio in base a vittoria o sconfitta - 
+        //messaggi separati per sconfitta con 0 numeri indovinati e sconfitta con numeri indovinati minori di 3
+        message.classList.remove('h5', 'h5-loser');
+
+        if (counter >= 3) {
+            message.classList.add('h5');
+            message.innerHTML = `Hai vinto indovinando ${counter} numeri su 5 : (${numeroIndovinato})`;
+            // Disabilito input e bottone dopo la vittoria
+            formElem.forEach(input => {
+                input.disabled = true;
+            });
+            bottoneConferma.disabled = true;
+            // Rimuovo la scritta lampeggiante
+            randomNumbers.innerHTML = '';
+        } else if (counter > 0) {
+            message.classList.add('h5-loser');
+            message.innerHTML = `Hai indovinato solo ${counter} numeri su 5 : hai perso`;
+            // Disabilito input e bottone dopo la sconfitta
+            formElem.forEach(input => {
+                input.disabled = true;
+            });
+            bottoneConferma.disabled = true;
+            randomNumbers.innerHTML = '';
+        } else {
+            message.classList.add('h5-loser');
+            message.innerHTML = `Non indovinato abbastanza numeri : hai perso`;
+            formElem.forEach(input => {
+                input.disabled = true;
+            });
+            bottoneConferma.disabled = true;
+            randomNumbers.innerHTML = '';
+        }
+    }
+});
 
 
 
 
-
-
-
-
-
-
-
-
+ricomincia.addEventListener("click", function () {
+    location.reload();
+});
